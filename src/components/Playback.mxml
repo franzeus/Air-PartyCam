@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300" xmlns:components="components.*"
+		 currentStateChange="changeState();"
+		 creationComplete="init()">
+	<fx:Metadata>
+		[Event(name="activeFrame", type="flash.events.Event")]		
+	</fx:Metadata>
+	
+	<fx:Script>
+		<![CDATA[
+			import models.Model;
+			import models.valueObject.Frame;
+			
+			[Bindable]
+			public var model:Model;
+						
+			[Bindable]
+			private var currentFrame:Frame;
+			private var timer:Timer;
+			
+			[Bindable]
+			private var showRect:Boolean = true;
+			
+			
+			// -----------------------------------------------------			
+			public function init():void {
+				addEventListener(Event.ADDED_TO_STAGE, addedToStageHandler);
+			}
+			
+			private function addedToStageHandler(e:Event):void {
+				stage.addEventListener(KeyboardEvent.KEY_UP, keyboardEventHandler);
+			}
+			
+			// -----------------------------------------------------
+			private function keyboardEventHandler(e:KeyboardEvent):void {
+				// ENTER key
+				if(e.keyCode == 13)
+					togglePlayPause();
+			}
+			
+			// -----------------------------------------------------
+			public function playback(e:TimerEvent=null):void {
+				
+				// No pic no playback
+				if(model.frames.length == 0)
+					return;				
+				
+				// Remove placeholder rect
+				showRect = false;
+				placeholderRect.width = 0;
+				placeholderRect.height = 0;
+				
+				// Auto slideshow
+				if(e){
+					(e.target as Timer).reset();
+					(e.target as Timer).removeEventListener(TimerEvent.TIMER, playback);
+					timer = null;
+				}
+				
+				if(model.currentIndex < model.frames.length) {
+					//if(model.currentIndex < 0)
+					//	model.currentIndex = model.frames.length - 1;
+					
+					currentFrame = model.frames.getItemAt(model.currentIndex) as Frame;
+					picture.source = currentFrame.bitmapData;				
+									
+					if(currentFrame.duration > 0 && currentState == "play") {
+						timer = new Timer(currentFrame.duration, 1);
+						timer.addEventListener(TimerEvent.TIMER, playback);
+						timer.start();
+					} else {
+						currentState = "pause";
+					}
+					
+					dispatchEvent(new Event("activeFrame"));
+
+					// Pause at the last frame				
+					if(model.currentIndex == model.frames.length - 1) {
+						currentState = "pause";
+					}
+					
+					// Iterate through frames if "auto" slideshow
+					if(e)
+						model.currentIndex++;
+					
+				}
+				else {
+					model.currentIndex = 0;
+					stop();
+				}
+			}
+			
+			// -----------------------------------------------------
+			private function changeState():void {
+				if(timer) {
+ 					if(timer.running)
+						timer.stop();
+					else
+						timer.start();
+				}
+				else if(currentFrame) {
+					if(currentState == "play")
+						playback();
+				}
+			}
+			
+			// -----------------------------------------------------
+			public function togglePlayPause():void {
+				if(currentState == "play") {
+					currentState = "pause";
+					stop();
+				} else {
+					if(model.currentIndex == model.frames.length - 1)
+						model.currentIndex = 0;
+					currentState = "play";
+				}
+				playback();
+			}
+			
+			// -----------------------------------------------------
+			private function stop():void {
+				if(timer) {
+					timer.removeEventListener(TimerEvent.TIMER, playback);
+					timer.reset();
+					timer = null;
+				}
+				
+			}
+		]]>
+	</fx:Script>
+
+	<s:states>
+		<s:State name="pause"/>
+		<s:State name="play"/>
+	</s:states>	
+	
+	<s:VGroup horizontalAlign="center">
+		<s:BitmapImage id="picture" width="320" height="240"/>
+		
+		<s:Rect id="placeholderRect" width="400" height="300" visible="{showRect}" >
+			<s:fill>
+				<s:SolidColor color="#000000"/>
+			</s:fill>
+		</s:Rect>
+		
+		<s:HGroup verticalAlign="middle">
+			<s:Button label="&lt;&lt;" click="model.currentIndex=0;playback()" />
+			<s:Button label="&lt;" click="model.previousFrame();playback();" />
+			<s:Button label.pause="Play" label.play="Pause" click="togglePlayPause();" horizontalCenter="0" bottom="10"/>
+			<s:Button label="&gt;" click="model.nextFrame();playback()" />
+		</s:HGroup>
+	</s:VGroup>
+</s:Group>

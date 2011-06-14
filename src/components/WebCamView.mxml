@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 creationComplete="creationCompleteHandler()" 
+		 horizontalCenter="0">
+	
+	<fx:Metadata>
+		[Event(name="newFrame", type="flash.events.Event")]		
+	</fx:Metadata>
+	
+	<fx:Script>
+		<![CDATA[
+			import models.Model;
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.graphics.ImageSnapshot;
+			
+			[Bindable]
+			public var model:Model = new Model();
+			
+			// -----------------------------------------------------
+			private function creationCompleteHandler():void {	
+				if(!model.initWebcam())
+					Alert.show("Could not detect a webcam !");
+				
+				webcam.attachCamera(model.camera);
+				addEventListener(Event.ADDED_TO_STAGE, addedToStageHandler);
+			}
+			
+			private function addedToStageHandler(e:Event):void {
+				stage.addEventListener(KeyboardEvent.KEY_UP, keyboardEventHandler);
+			}
+			
+			// -----------------------------------------------------
+			private function keyboardEventHandler(e:KeyboardEvent):void {
+				// Space
+				if(e.keyCode == 32) 
+					makeShot();
+				// T for Timer
+				else if(e.keyCode == 84) 
+					startTimer();
+			}
+			
+			// -----------------------------------------------------
+			public function makeShot():void {
+				var bd:BitmapData = ImageSnapshot.captureBitmapData(webcam);
+				model.recordFrame(bd);	
+				model.currentIndex = model.frames.length - 1;
+				dispatchEvent(new Event("newFrame"));
+			}
+			
+			// -----------------------------------------------------
+			protected function resizeCam_changeEndHandler(event:FlexEvent):void	{
+				//model.camWidth = camWidthSlider.value;
+			}
+			
+			// ----------------------------
+			// TIMER SCHMAEH			
+			var myTimer:Timer = new Timer(1000, 0);
+			
+			[Bindable]
+			var currentSecond:Number = model.timerTime;
+			var startValue:Number = model.timerTime;
+			
+			public function startTimer():void {
+				timerLabel.visible = true;
+				
+				myTimer.addEventListener("timer", updateDisplay);
+				myTimer.start();				
+			}
+			
+			private function updateDisplay(e:TimerEvent):void {
+				if(currentSecond > 0) {
+					currentSecond--;
+				} else {
+					currentSecond = startValue;
+					//myTimer.stop();
+					makeShot();
+					//timerLabel.visible = false;
+				}
+			}
+			// ----------------------------		
+			/* <s:Label text="Camera size {model.camWidth}" id="camSizeLabel" />
+			<s:HSlider id="camWidthSlider" minimum="300" value="{model.camWidth}" maximum="600" stepSize="100" changeEnd="resizeCam_changeEndHandler(event)" />
+			*/
+		]]>
+	</fx:Script>
+	
+	<s:VGroup>	
+		
+		<mx:VideoDisplay id="webcam" width="{model.camWidth}" height="{model.camHeight}" click="makeShot()" />
+		<s:HGroup gap="20">
+			<s:Button label="Take Picture" id="recordButton" click="makeShot()" width="160" height="50" cornerRadius="10"/>
+			<mx:Image source="@Embed(source='../assets/timer.gif')" height="50" width="50" click="startTimer()" buttonMode="true"/>
+			<s:Label text="{currentSecond}" visible="false" id="timerLabel" />					
+		</s:HGroup>
+
+	</s:VGroup>
+</s:Group>

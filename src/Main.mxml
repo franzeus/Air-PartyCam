@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:components="components.*"
+			   creationComplete="init()"
+			   backgroundColor="#F6F6F6" minWidth="1000" minHeight="800">
+	<fx:Style source="styles.css"/>
+	<fx:Script>
+		<![CDATA[			
+			import models.Model;
+			
+			[Bindable]
+			public var model:Model = new Model();
+
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				// TODO Automatisch generierter Methoden-Stub
+			}
+
+		]]>
+	</fx:Script>
+	<s:Button label=" Settings " click="button1_clickHandler(event)" />		
+	
+	<s:VGroup horizontalAlign="center" horizontalCenter="0">
+		<s:Label text="Party Shot" id="siteTitle" />
+		
+		<s:HGroup>				
+			<components:WebCamView id="webcam" model="{model}"
+							 newFrame="playback.playback()"/>
+			<components:Playback id="playback"	model="{model}"						 
+							 activeFrame="imageList.updateFrame()"
+							 />
+		</s:HGroup>
+		<s:Scroller width="900">
+			<components:ImageList id="imageList" model="{model}" width="900"  currentIndexChanged="playback.playback()" startSlideshow="playback.togglePlayPause()"/>
+		</s:Scroller>
+					
+		<s:Label text="KeyControl: Spacebar = Take shot || Enter = Play || T = Timer shot" />		
+	</s:VGroup>
+</s:WindowedApplication>

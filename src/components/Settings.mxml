@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx">
+	<fx:Declarations>
+		<!-- Platzieren Sie nichtvisuelle Elemente (z. B. Dienste, Wertobjekte) hier -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import models.Model;
+			
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.graphics.ImageSnapshot;
+			
+			import spark.events.TextOperationEvent;
+			
+			[Bindable]
+			public var model:Model = new Model();
+
+			protected function timerTime_changeHandler():void {
+				model.timerTime = new int(timerTime.text);
+				trace("Changed to " + timerTime.text);
+			}
+
+		]]>
+	</fx:Script>
+	<s:VGroup gap="20">
+		<s:HGroup>
+			<s:Label text="Timer (seconds)" fontWeight="bold"/>
+			<s:TextInput id="timerTime" width="37" text="{model.timerTime}"/>	
+		</s:HGroup>
+		
+	<s:Button label="Save Settings" width="157" height="34" id="saveButton" click="timerTime_changeHandler()"/>
+	</s:VGroup>
+</s:Group>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				autoDrawBackground="false">
+	<fx:Script>
+		<![CDATA[
+			import models.valueObject.Frame;
+			private var thumbHeight:Number = 145;
+			
+			override public function set data(value:Object):void
+			{
+				super.data = value;
+				if (data) {					
+					var d:Frame = data as Frame;					
+					bitmap.source = d.bitmapData;
+					
+					bitmap.width = (d.bitmapData.width / d.bitmapData.height) * thumbHeight;			
+					bitmap.height = thumbHeight;
+					
+					frameId.text = itemIndex.toString();
+					caption.text = "ID: "+d.id.toString() + " - Duration: " + d.duration + " ms";
+				}
+			}
+		]]>
+	</fx:Script>
+	
+	<s:states> 
+		<s:State name="normal"/>
+		<s:State name="hovered"/>
+		<s:State name="selected"/>
+	</s:states>
+	
+	<s:VGroup height="213" gap="0" alpha.hovered=".8" alpha.selected=".2">
+		<mx:Image source="@Embed(source='../assets/film_top.jpg')" />
+		
+		<s:Group height="100%" width="100%">			
+				<s:Rect width="100%" height="{thumbHeight}">
+					<s:fill>
+						<s:SolidColor color="#000000" />
+					</s:fill>
+				</s:Rect>
+				<s:BitmapImage id="bitmap" verticalCenter="0" horizontalCenter="0"/>	
+			
+			<s:Label id="frameId" horizontalCenter="0" verticalCenter="0" alpha=".3" alpha.selected="1" />
+		</s:Group>
+		
+		<s:Group width="100%" height="34" >
+			<mx:Image source="@Embed(source='../assets/film_bottom.jpg')" />				
+			<s:Label id="caption" horizontalCenter="0" bottom="0"/>
+		</s:Group>		
+	</s:VGroup>
+	
+</s:ItemRenderer>
