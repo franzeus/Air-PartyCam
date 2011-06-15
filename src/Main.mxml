@@ -12,17 +12,22 @@
 			
 			[Bindable]
 			public var model:Model = new Model();
+			[Bindable]
+			private var isSettings:Boolean;
+			
+			private function init():void {
+				isSettings = false;
+			}
 
-			protected function button1_clickHandler(event:MouseEvent):void
-			{
-				// TODO Automatisch generierter Methoden-Stub
+			protected function button1_clickHandler(event:MouseEvent):void {
+				isSettings = isSettings == true ? false : true;
 			}
 
 		]]>
 	</fx:Script>
 	<s:Button label=" Settings " click="button1_clickHandler(event)" />		
 	
-	<s:VGroup horizontalAlign="center" horizontalCenter="0">
+	<s:VGroup id="bgGroup" horizontalAlign="center" horizontalCenter="0">
 		<s:Label text="Party Shot" id="siteTitle" />
 		
 		<s:HGroup>				
@@ -38,4 +43,8 @@
 					
 		<s:Label text="KeyControl: Spacebar = Take shot || Enter = Play || T = Timer shot" />		
 	</s:VGroup>
+	
+	<components:Settings visible="{isSettings}" model="{model}" />
+		
+	
 </s:WindowedApplication>

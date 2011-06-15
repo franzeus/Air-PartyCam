@@ -36,7 +36,7 @@ package models
 		public function Model():void {			
 			camWidth = 640;
 			
-			timerTime = 10;
+			timerTime = 60;
 			
 			_frames = new ArrayCollection();
 		}
@@ -165,6 +165,7 @@ package models
 		}
 		
 		public function set timerTime(value:int):void {
+			trace("SetTimer" + value);
 			_timerTime = value;
 		}
 	}

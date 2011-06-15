@@ -18,6 +18,11 @@ s|Application {
 	line-height:20;
 }
 
+#settingsWindow {
+	background-color:#F6F6F6;
+}
+	
+
 #siteTitle { font-size:60; color:#356AA0; font-family: "Alpaca"; padding-top:20;}
 #camSizeLabel { font-size:12; }
 
@@ -33,3 +38,7 @@ s|Application {
 #frameId { fontSize:120; color:#d6912c; }
 
 #labelId { color:#c09554; fontSize:20; }
+
+#timerTime {
+	font-size:30;
+}

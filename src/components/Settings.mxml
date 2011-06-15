@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx">
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 horizontalCenter="0" verticalCenter="0" width="500" height="180">
 	<fx:Declarations>
 		<!-- Platzieren Sie nichtvisuelle Elemente (z. B. Dienste, Wertobjekte) hier -->
 	</fx:Declarations>
@@ -12,26 +13,26 @@
 			
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
-			import mx.graphics.ImageSnapshot;
-			
+			import mx.graphics.ImageSnapshot;			
 			import spark.events.TextOperationEvent;
 			
 			[Bindable]
 			public var model:Model = new Model();
 
 			protected function timerTime_changeHandler():void {
-				model.timerTime = new int(timerTime.text);
-				trace("Changed to " + timerTime.text);
+				model.timerTime = parseInt(timerTime.text);
 			}
-
 		]]>
 	</fx:Script>
-	<s:VGroup gap="20">
-		<s:HGroup>
+	<s:Group height="100%" width="100%">		
+		<s:Rect width="100%" height="100%">
+			<s:fill><s:SolidColor color="0xF6F6F6" /></s:fill>
+		</s:Rect>
+		<s:VGroup paddingTop="20" paddingLeft="20">
 			<s:Label text="Timer (seconds)" fontWeight="bold"/>
-			<s:TextInput id="timerTime" width="37" text="{model.timerTime}"/>	
-		</s:HGroup>
+			<s:TextInput id="timerTime" text="{model.timerTime}" width="50" height="40"/>
+			<s:Button label="Save Settings" width="160" height="40" id="saveButton" click="timerTime_changeHandler()"/>
+		</s:VGroup>
+	</s:Group>
 		
-	<s:Button label="Save Settings" width="157" height="34" id="saveButton" click="timerTime_changeHandler()"/>
-	</s:VGroup>
 </s:Group>
