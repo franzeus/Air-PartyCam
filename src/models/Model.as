@@ -25,7 +25,7 @@ package models
 				
 		private var _frames:ArrayCollection;
 		
-		public var defaultFrameDuration:Number = 800;
+		private var _defaultFrameDuration:Number = 800;
 		private var frameId:int = 0;	
 		
 		public var nextIndex:int = 0;
@@ -79,7 +79,7 @@ package models
 			var fl:File = File.desktopDirectory.resolvePath("party/" + timeString + ".jpg");
 			
 			var fs:FileStream = new FileStream();
-			try{				
+			try {
 				//open file in write mode
 				fs.open(fl, FileMode.WRITE);
 				//write bytes from the byte array
@@ -165,8 +165,15 @@ package models
 		}
 		
 		public function set timerTime(value:int):void {
-			trace("SetTimer" + value);
 			_timerTime = value;
+		}
+		
+		public function get defaultFrameDuration():Number {
+			return _defaultFrameDuration;
+		}
+		
+		public function set defaultFrameDuration(value:Number):void	{
+			_defaultFrameDuration = value;
 		}
 	}
 }

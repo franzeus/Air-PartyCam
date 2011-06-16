@@ -2,7 +2,7 @@
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 horizontalCenter="0" verticalCenter="0" width="500" height="180">
+		 horizontalCenter="0" verticalCenter="0" width="500" height="200">
 	<fx:Declarations>
 		<!-- Platzieren Sie nichtvisuelle Elemente (z. B. Dienste, Wertobjekte) hier -->
 	</fx:Declarations>
@@ -13,14 +13,26 @@
 			
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
-			import mx.graphics.ImageSnapshot;			
+			import mx.graphics.ImageSnapshot;
+			
 			import spark.events.TextOperationEvent;
 			
 			[Bindable]
 			public var model:Model = new Model();
 
 			protected function timerTime_changeHandler():void {
-				model.timerTime = parseInt(timerTime.text);
+				var newTimerTime:Number = parseInt(timerTime.text);
+				var newFrameDuration:int = parseInt(playbackTime.text);
+				
+				if(newTimerTime > 0)
+					model.timerTime = parseInt(timerTime.text);
+				else
+					Alert.show("Timer value has to be higher than 0");
+				
+				if(newFrameDuration > 0)
+					model.defaultFrameDuration = parseInt(playbackTime.text);
+				else
+					Alert.show("Frame duration values has to be higher than 0");
 			}
 		]]>
 	</fx:Script>
@@ -31,6 +43,8 @@
 		<s:VGroup paddingTop="20" paddingLeft="20">
 			<s:Label text="Timer (seconds)" fontWeight="bold"/>
 			<s:TextInput id="timerTime" text="{model.timerTime}" width="50" height="40"/>
+			<s:Label text="Frame duration (milliseconds)" fontWeight="bold"/>
+			<s:TextInput id="playbackTime" text="{model.defaultFrameDuration}" width="50" height="40"/>
 			<s:Button label="Save Settings" width="160" height="40" id="saveButton" click="timerTime_changeHandler()"/>
 		</s:VGroup>
 	</s:Group>

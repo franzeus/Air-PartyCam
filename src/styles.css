@@ -23,7 +23,7 @@ s|Application {
 }
 	
 
-#siteTitle { font-size:60; color:#356AA0; font-family: "Alpaca"; padding-top:20;}
+#siteTitle { font-size:60; color:#00aeff; font-family: "Alpaca"; padding-top:20;}
 #camSizeLabel { font-size:12; }
 
 #recordButton {
@@ -31,7 +31,7 @@ s|Application {
 	color:#880000;
 }
 
-#timerLabel { font-size: 30; fontFamily: "Alpaca"; }
+#timerLabel { font-size: 45; fontFamily: "Alpaca"; color:#F6F6F6; }
 
 #caption { color:#c09554; fontSize:8;}
 
@@ -42,3 +42,9 @@ s|Application {
 #timerTime {
 	font-size:30;
 }
+
+#bubbleText{
+	font-size:15; border-visible:false; font-family: "Comic Sans MS";
+}
+
+#keyText { color:#F6F6F6; }

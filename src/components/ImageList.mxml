@@ -54,13 +54,13 @@
 			// -----------------------------------------------------			
 			private function keyboardEventHandler(e:KeyboardEvent):void {
 				// DEL or BACKSPACE
-				if(e.keyCode == 46 || e.keyCode == 8) {
+				/*if(e.keyCode == 46 || e.keyCode == 8) {
 					if(frameList.selectedItems)	{						
 						model.removeFrame(frameList);
 					}
-				}				
+				}	*/			
 				// RIGHT
-				else if(e.keyCode == 39) {
+				if(e.keyCode == 39) {
 					model.nextFrame();
 					updateFrame();
 					dispatchEvent(new Event("currentIndexChanged"));

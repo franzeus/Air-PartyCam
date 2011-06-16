@@ -12,12 +12,28 @@
 	<fx:Script>
 		<![CDATA[
 			import models.Model;
+			
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
 			import mx.graphics.ImageSnapshot;
 			
 			[Bindable]
 			public var model:Model = new Model();
+			
+			[Bindable]
+			private var showBubble:Boolean = false;
+			
+			[Bindable]
+			[Embed("../assets/icon_timer.gif")]
+			private var icon_timer:Class;
+			
+			[Bindable]
+			[Embed("../assets/timer_active.gif")]
+			private var icon_timer_active:Class;
+			
+			[Bindable]
+			[Embed("../assets/buble.png")]
+			private var img_buble:Class;
 			
 			// -----------------------------------------------------
 			private function creationCompleteHandler():void {	
@@ -34,25 +50,32 @@
 			
 			// -----------------------------------------------------
 			private function keyboardEventHandler(e:KeyboardEvent):void {
-				// Space
-				if(e.keyCode == 32) 
+				trace(e.keyCode);
+				// F5 for picture
+				if(e.keyCode == 116) 
 					makeShot();
 				// T for Timer
-				else if(e.keyCode == 84) 
+				else if(e.keyCode == 118) 
 					startTimer();
 			}
 			
 			// -----------------------------------------------------
 			public function makeShot():void {
-				var bd:BitmapData = ImageSnapshot.captureBitmapData(webcam);
+				var bd:BitmapData = ImageSnapshot.captureBitmapData(canvas);
 				model.recordFrame(bd);	
 				model.currentIndex = model.frames.length - 1;
 				dispatchEvent(new Event("newFrame"));
 			}
 			
 			// -----------------------------------------------------
+			public function displayBubble():void {
+				showBubble = showBubble ? false : true;
+				//bubbleText.focusRect = false;
+			}
+			
+			// -----------------------------------------------------
 			protected function resizeCam_changeEndHandler(event:FlexEvent):void	{
-				//model.camWidth = camWidthSlider.value;
+				//model.camWidth = camWidthSlider.value;				
 			}
 			
 			// ----------------------------
@@ -64,13 +87,23 @@
 			var startValue:Number = model.timerTime;
 			
 			public function startTimer():void {
-				timerLabel.visible = true;
 				
-				currentSecond = model.timerTime;
-				startValue = model.timerTime;
+				if(!timerLabel.visible) {
+					timerLabel.visible = true;
+					currentSecond = model.timerTime;
+					startValue = model.timerTime;
 				
-				myTimer.addEventListener("timer", updateDisplay);
-				myTimer.start();				
+					myTimer.addEventListener("timer", updateDisplay);
+					myTimer.start();	
+					startTimerButton.source = icon_timer_active;
+					startTimerButton.toolTip = "Stop Timer";
+				} else {
+					currentSecond = model.timerTime;
+					myTimer.stop();
+					timerLabel.visible = false;
+					startTimerButton.source = icon_timer;
+					startTimerButton.toolTip = "Start Timer";
+				}
 			}
 			
 			private function updateDisplay(e:TimerEvent):void {
@@ -78,9 +111,7 @@
 					currentSecond--;
 				} else {
 					currentSecond = model.timerTime;
-					//myTimer.stop();
 					makeShot();
-					//timerLabel.visible = false;
 				}
 			}
 			// ----------------------------		
@@ -91,11 +122,17 @@
 	</fx:Script>
 	
 	<s:VGroup>
-		<mx:VideoDisplay id="webcam" width="{model.camWidth}" height="{model.camHeight}" click="makeShot()" />
+		<s:Group id="canvas">		
+			<mx:VideoDisplay id="webcam" width="{model.camWidth}" height="{model.camHeight}" click="makeShot()" />
+			<mx:Image id="buble" visible="{showBubble}" x="{webcam.x + webcam.width / 2 - 175}" y="{webcam.y}" source="{img_buble}" height="150" width="350" buttonMode="true"/>
+			<s:TextArea id="bubbleText" visible="{showBubble}" borderAlpha="0" text="AWESOME WG!" width="{buble.width - 70}" height="55" x="{buble.x + 28}" y="{buble.y + 40}" />
+		</s:Group>
+		
 		<s:HGroup gap="20">
 			<s:Button label="Take Picture" id="recordButton" click="makeShot()" width="160" height="50" cornerRadius="10"/>
-			<mx:Image source="@Embed(source='../assets/icon_timer.gif')" height="50" width="50" click="startTimer()" buttonMode="true"/>
+			<s:Button label="Message"  id="bubbleButton" click="displayBubble()" width="60" height="50" cornerRadius="10"/>
+			<mx:Image id="startTimerButton" toolTip="Start Timer" source="{icon_timer}" height="50" width="50" click="startTimer()" buttonMode="true"/>
 			<s:Label text="{currentSecond}" visible="false" id="timerLabel" />
-		</s:HGroup>
+		</s:HGroup>		
 	</s:VGroup>
 </s:Group>

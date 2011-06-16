@@ -67,7 +67,7 @@
 					picture.source = currentFrame.bitmapData;				
 									
 					if(currentFrame.duration > 0 && currentState == "play") {
-						timer = new Timer(currentFrame.duration, 1);
+						timer = new Timer(model.defaultFrameDuration, 1); //currentFrame.duration
 						timer.addEventListener(TimerEvent.TIMER, playback);
 						timer.start();
 					} else {

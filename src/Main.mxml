@@ -4,7 +4,7 @@
 			   xmlns:mx="library://ns.adobe.com/flex/mx"
 			   xmlns:components="components.*"
 			   creationComplete="init()"
-			   backgroundColor="#F6F6F6" minWidth="1000" minHeight="800">
+			   backgroundColor="#1d2224" minWidth="1000" minHeight="800">
 	<fx:Style source="styles.css"/>
 	<fx:Script>
 		<![CDATA[			
@@ -28,7 +28,7 @@
 	<s:Button label=" Settings " click="button1_clickHandler(event)" />		
 	
 	<s:VGroup id="bgGroup" horizontalAlign="center" horizontalCenter="0">
-		<s:Label text="Party Shot" id="siteTitle" />
+		<s:Label text="PartyCam" id="siteTitle" />
 		
 		<s:HGroup>				
 			<components:WebCamView id="webcam" model="{model}"
@@ -41,7 +41,7 @@
 			<components:ImageList id="imageList" model="{model}" width="900"  currentIndexChanged="playback.playback()" startSlideshow="playback.togglePlayPause()"/>
 		</s:Scroller>
 					
-		<s:Label text="KeyControl: Spacebar = Take shot || Enter = Play || T = Timer shot" />		
+		<s:Label id="keyText" text="KeyControl: F5 = Take shot || Enter = Play || F9 = Timer" />		
 	</s:VGroup>
 	
 	<components:Settings visible="{isSettings}" model="{model}" />
