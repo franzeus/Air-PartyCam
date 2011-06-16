@@ -16,6 +16,8 @@ package models
 	
 	import spark.components.List;
 	
+	// Class to save movies: http://www.zeropointnine.com/blog/assets_code/SimpleFlvWriter.as.txt
+	
 	[Bindable]
 	public class Model extends EventDispatcher
 	{		

@@ -33,6 +33,8 @@
 					model.defaultFrameDuration = parseInt(playbackTime.text);
 				else
 					Alert.show("Frame duration values has to be higher than 0");
+				
+				
 			}
 		]]>
 	</fx:Script>
@@ -46,6 +48,7 @@
 			<s:Label text="Frame duration (milliseconds)" fontWeight="bold"/>
 			<s:TextInput id="playbackTime" text="{model.defaultFrameDuration}" width="50" height="40"/>
 			<s:Button label="Save Settings" width="160" height="40" id="saveButton" click="timerTime_changeHandler()"/>
+			<s:Label text="made by www.weberdevelopment.de" />
 		</s:VGroup>
 	</s:Group>
 		

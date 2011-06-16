@@ -4,16 +4,17 @@
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 creationComplete="creationCompleteHandler()" 
 		 horizontalCenter="0">
-	
+
 	<fx:Metadata>
 		[Event(name="newFrame", type="flash.events.Event")]		
 	</fx:Metadata>
-	
+
 	<fx:Script>
 		<![CDATA[
 			import models.Model;
 			
 			import mx.controls.Alert;
+			import mx.events.DragEvent;
 			import mx.events.FlexEvent;
 			import mx.graphics.ImageSnapshot;
 			
@@ -34,7 +35,7 @@
 			[Bindable]
 			[Embed("../assets/buble.png")]
 			private var img_buble:Class;
-			
+
 			// -----------------------------------------------------
 			private function creationCompleteHandler():void {	
 				if(!model.initWebcam())
@@ -50,19 +51,18 @@
 			
 			// -----------------------------------------------------
 			private function keyboardEventHandler(e:KeyboardEvent):void {
-				trace(e.keyCode);
 				// F5 for picture
-				if(e.keyCode == 116) 
+				if(e.keyCode == 116)
 					makeShot();
 				// T for Timer
 				else if(e.keyCode == 118) 
 					startTimer();
 			}
-			
+
 			// -----------------------------------------------------
 			public function makeShot():void {
 				var bd:BitmapData = ImageSnapshot.captureBitmapData(canvas);
-				model.recordFrame(bd);	
+				model.recordFrame(bd);
 				model.currentIndex = model.frames.length - 1;
 				dispatchEvent(new Event("newFrame"));
 			}
@@ -120,19 +120,19 @@
 			*/
 		]]>
 	</fx:Script>
-	
+
 	<s:VGroup>
-		<s:Group id="canvas">		
+		<s:Group id="canvas">
 			<mx:VideoDisplay id="webcam" width="{model.camWidth}" height="{model.camHeight}" click="makeShot()" />
 			<mx:Image id="buble" visible="{showBubble}" x="{webcam.x + webcam.width / 2 - 175}" y="{webcam.y}" source="{img_buble}" height="150" width="350" buttonMode="true"/>
-			<s:TextArea id="bubbleText" visible="{showBubble}" borderAlpha="0" text="AWESOME WG!" width="{buble.width - 70}" height="55" x="{buble.x + 28}" y="{buble.y + 40}" />
+			<s:TextArea id="bubbleText" visible="{showBubble}" borderAlpha="0" text="Enter Text here!" width="{buble.width - 70}" height="55" x="{buble.x + 28}" y="{buble.y + 40}" />
 		</s:Group>
-		
+
 		<s:HGroup gap="20">
 			<s:Button label="Take Picture" id="recordButton" click="makeShot()" width="160" height="50" cornerRadius="10"/>
 			<s:Button label="Message"  id="bubbleButton" click="displayBubble()" width="60" height="50" cornerRadius="10"/>
 			<mx:Image id="startTimerButton" toolTip="Start Timer" source="{icon_timer}" height="50" width="50" click="startTimer()" buttonMode="true"/>
 			<s:Label text="{currentSecond}" visible="false" id="timerLabel" />
-		</s:HGroup>		
+		</s:HGroup>
 	</s:VGroup>
 </s:Group>
